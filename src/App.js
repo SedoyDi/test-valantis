@@ -5,6 +5,7 @@ function App() {
     <div className="App">
       <header className="App-header">
         тест авто деплой
+        тест авто деплой
       </header>
     </div>
   );
