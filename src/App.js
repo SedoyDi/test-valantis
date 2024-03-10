@@ -4,7 +4,7 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
-        шаблон
+        тест авто деплой
       </header>
     </div>
   );
