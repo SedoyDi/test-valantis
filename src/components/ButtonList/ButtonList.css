@@ -1,0 +1,26 @@
+.button-list {
+  display: flex;
+  min-width: 200px;
+}
+.button {
+  margin: 0 10px;
+  padding: 5px 10px;
+  border-radius: 5px;
+  border: none;
+  background-color: #fc0;
+  cursor: pointer;
+}
+.button:hover {
+  box-shadow: 0 0 10px 5px #8080805e;
+}
+.button:disabled {
+  cursor: default;
+}
+.button:disabled:hover {
+  box-shadow: none;
+}
+
+.button-list__counter {
+  text-align: center;
+  width: 90px;
+}
