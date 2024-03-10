@@ -1,7 +1,7 @@
 import React from 'react';
 import './ButtonList.css';
 
-function ButtonList({ count, length, setCount }) {
+function ButtonList({ count, length, setCount, hendleInc, hendleDec }) {
 
     const textCount = count === 1
         ? `${count}* ... ${length}`
@@ -10,11 +10,13 @@ function ButtonList({ count, length, setCount }) {
             : `1 ... ${count}* ... ${length}`)
 
     function decCount() {
+        hendleDec()
         let res = count - 1;
         setCount(res);
     }
 
     function incCount() {
+        hendleInc()
         let res = count + 1;
         setCount(res);
     }

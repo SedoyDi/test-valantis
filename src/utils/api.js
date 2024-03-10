@@ -19,5 +19,19 @@ const getIds = () => {
         })
     }).then(_getResponse);
 };
+const getItems = (arrayIds) => {
+    return fetch(BASE_URL, {
+        method: "POST",
+        headers: {
+            "X-Auth": AUTH_KEY,
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+            "action": "get_items",
+            "params": { "ids": arrayIds }
+        })
+    }).then(_getResponse);
 
-export { getIds };
+}
+
+export { getIds, getItems };

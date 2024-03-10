@@ -10,7 +10,7 @@ root.render(
   <React.StrictMode>
     <BrowserRouter>
       <Routes>
-        <Route path='/home' element={<App />} />
+        <Route path='/test-valantis' element={<App />} />
         <Route path='/*' element={<Page404 />} />
       </Routes>
     </BrowserRouter>

@@ -3,73 +3,94 @@ import './App.css';
 import ButtonList from './components/ButtonList/ButtonList';
 import ItemCard from './components/ItemCard/ItemCard';
 import Loader from './components/Loader/Loader';
-// import { getIds } from './utils/api';
+import { getIds, getItems } from './utils/api';
 
 function App() {
-  const [itemList, setItemList] = useState([
-    {
-      "brand": null,
-      "id": "1789ecf3-f81c-4f49-ada2-83804dcc74b0",
-      "price": 16700.0,
-      "product": "Золотое кольцо с бриллиантами"
-    },
-    {
-      "brand": '',
-      "id": "1789ecf3-f81c-4f49-ada2-83804dcc74b0",
-      "price": 16700.0,
-      "product": "Золотое кольцо с бриллиантами"
-    },
-    {
-      "brand": "null",
-      "id": "1789ecf3-f81c-4f49-ada2-83804dcc74b0",
-      "price": 16700.0,
-      "product": "Золотое кольцо с бриллиантами"
-    },
-    {
-      "brand": '',
-      "id": "1789ecf3-f81c-4f49-ada2-83804dcc74b0",
-      "price": 16700.0,
-      "product": "Золотое кольцо с бриллиантами"
-    },
-    {
-      "brand": null,
-      "id": "1789ecf3-f81c-4f49-ada2-83804dcc74b0",
-      "price": 16700.0,
-      "product": "Золотое кольцо с бриллиантами"
-    },
-    {
-      "brand": null,
-      "id": "1789ecf3-f81c-4f49-ada2-83804dcc74b0",
-      "price": 16700.0,
-      "product": "Золотое кольцо с бриллиантами"
-    },
-    {
-      "brand": null,
-      "id": "1789ecf3-f81c-4f49-ada2-83804dcc74b0",
-      "price": 16700.0,
-      "product": "Золотое кольцо с бриллиантами"
-    },
-    {
-      "brand": null,
-      "id": "1789ecf3-f81c-4f49-ada2-83804dcc74b0",
-      "price": 16700.0,
-      "product": "Золотое кольцо с бриллиантами"
-    },
-  ]);
-  const [isLoading, setIsLoading] = useState(true)
 
-  const length = itemList.length;
+  const [isLoading, setIsLoading] = useState(false)
+  const [listIds, setListIds] = useState([]);
+  const length = listIds.length / 50; // вычисляю кол-во страниц
+  const [itemList, setItemList] = useState([]);
+  const [startIndex, setStartIndex] = useState(0);
+
+  const [stepDec, setStepDec] = useState(0);
+  const [stepInc, setStepInc] = useState(50);
+
+
 
   const [count, setCount] = useState(1);
 
-  console.log(itemList.length)
-  // useEffect(() => {
-  //   getIds()
-  //     .then((res) => {
-  //       console.log(`результат ${res}`)
-  //     })
-  //     .catch(err => console.log(err))
-  // }, []);
+  function hendleDecItem() {
+    if ((startIndex - 50) >= 0) {
+      setStepDec(startIndex - 50)
+    } else {
+      setStepDec(0)
+    }
+    const arrayIds = listIds.slice(stepDec, startIndex);
+    setIsLoading(true);
+    getItems(arrayIds)
+      .then((res) => {
+        setItemList(res.result);
+        setStartIndex(stepDec)
+        setIsLoading(false);
+      })
+      .catch((error) => {
+        console.log(error);
+        setIsLoading(false);
+      });
+  }
+
+  function hendleIncItem() {
+    if ((startIndex + 50) < listIds.length) {
+      setStepInc(startIndex + 50)
+    } else {
+      setStepInc(listIds.length)
+    }
+    const arrayIds = listIds.slice(startIndex, stepInc);
+
+    setIsLoading(true)
+    getItems(arrayIds)
+      .then((res) => {
+        setItemList(res.result);
+        setStartIndex(stepInc)
+        setIsLoading(false)
+      })
+      .catch((error) => {
+        console.log(error);
+        setIsLoading(false)
+      });
+  }
+
+  useEffect(() => {
+    getIds()
+      .then((res) => {
+        const result = JSON.parse(JSON.stringify(res.result));
+        const uniqueIds = result.filter((value, index, self) => self.indexOf(value) === index);
+        setListIds(uniqueIds);// создаём массив уникальных id
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, []);
+
+  useEffect(() => {
+    if (listIds.length !== 0) {
+      const arrayIds = listIds.slice(startIndex, stepInc);
+      setIsLoading(true)
+      getItems(arrayIds)
+        .then((res) => {
+          setStepInc(startIndex + 50)
+          console.log(stepInc)
+          setItemList(res.result);
+          setStartIndex(stepInc)
+          setIsLoading(false)
+        })
+        .catch((error) => {
+          console.log(error);
+          setIsLoading(false)
+        });
+    }
+  }, [listIds])
 
   return (
     <>
@@ -80,7 +101,9 @@ function App() {
         <ButtonList
           length={length}
           count={count}
-          setCount={setCount} />
+          setCount={setCount}
+          hendleInc={hendleIncItem}
+          hendleDec={hendleDecItem} />
         {isLoading
           ? (<Loader />)
           : (<ul className='app__item-list'>
@@ -90,7 +113,9 @@ function App() {
         <ButtonList
           length={length}
           count={count}
-          setCount={setCount} />
+          setCount={setCount}
+          hendleInc={hendleIncItem}
+          hendleDec={hendleDecItem} />
       </main>
     </>
   );
