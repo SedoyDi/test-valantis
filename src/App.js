@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import './App.css';
 import ButtonList from './components/ButtonList/ButtonList';
 import ItemCard from './components/ItemCard/ItemCard';
+import Loader from './components/Loader/Loader';
 // import { getIds } from './utils/api';
 
 function App() {
@@ -55,6 +56,7 @@ function App() {
       "product": "Золотое кольцо с бриллиантами"
     },
   ]);
+  const [isLoading, setIsLoading] = useState(true)
 
   const length = itemList.length;
 
@@ -79,9 +81,12 @@ function App() {
           length={length}
           count={count}
           setCount={setCount} />
-        <ul className='app__item-list'>
-          {itemList.map((item, key) => <ItemCard key={key} item={item} />)}
-        </ul>
+        {isLoading
+          ? (<Loader />)
+          : (<ul className='app__item-list'>
+            {itemList.map((item, key) => <ItemCard key={key} item={item} />)}
+          </ul>)
+        }
         <ButtonList
           length={length}
           count={count}
