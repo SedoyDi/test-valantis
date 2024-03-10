@@ -80,7 +80,6 @@ function App() {
       getItems(arrayIds)
         .then((res) => {
           setStepInc(startIndex + 50)
-          console.log(stepInc)
           setItemList(res.result);
           setStartIndex(stepInc)
           setIsLoading(false)
