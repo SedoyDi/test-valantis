@@ -8,16 +8,15 @@ const _getResponse = (res) => {
 };
 
 const getIds = () => {
-    return fetch({ BASE_URL }, {
+    return fetch(BASE_URL, {
         method: "POST",
         headers: {
             "X-Auth": AUTH_KEY,
             "Content-Type": "application/json",
         },
-        body:
-            JSON.stringify({
-                "action": "get_ids",
-            })
+        body: JSON.stringify({
+            "action": "get_ids",
+        })
     }).then(_getResponse);
 };
 
