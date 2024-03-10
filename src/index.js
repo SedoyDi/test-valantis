@@ -11,7 +11,7 @@ root.render(
     <BrowserRouter>
       <Routes>
         <Route path='/test-valantis' element={<App />} />
-        <Route path='/*' element={<Page404 />} />
+        <Route path='/test-valantis/*' element={<Page404 />} />
       </Routes>
     </BrowserRouter>
   </React.StrictMode>
